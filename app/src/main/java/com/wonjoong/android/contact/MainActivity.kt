@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
@@ -102,18 +103,23 @@ fun SearchView(state: MutableState<TextFieldValue>) {
             )
         },
         trailingIcon = {
-            if (state.value != TextFieldValue("")) {
-                IconButton(onClick = { state.value = TextFieldValue("") }) {
-                    Icon(
-                        Icons.Default.Close,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(15.dp)
-                            .size(24.dp)
-                    )
-                }
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(Icons.Default.Add, contentDescription = "")
             }
         },
+//        trailingIcon = {
+//            if (state.value != TextFieldValue("")) {
+//                IconButton(onClick = { state.value = TextFieldValue("") }) {
+//                    Icon(
+//                        Icons.Default.Close,
+//                        contentDescription = "",
+//                        modifier = Modifier
+//                            .padding(15.dp)
+//                            .size(24.dp)
+//                    )
+//                }
+//            }
+//        },
         singleLine = true,
         shape = RectangleShape,
         colors = TextFieldDefaults.textFieldColors(
@@ -141,8 +147,18 @@ fun PersonListItem(name: String, onItemClick: (String) -> Unit) {
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = name, fontSize = 18.sp, color = Color.Black, modifier = Modifier.padding(8.dp, 4.dp, 8.dp, 4.dp))
-        Text(text = "25/Friend/Facebook/Single", modifier = Modifier.padding(8.dp, 4.dp, 4.dp, 8.dp), fontSize = 14.sp, color = Color.Gray)
+        Text(
+            text = name,
+            fontSize = 18.sp,
+            color = Color.Black,
+            modifier = Modifier.padding(8.dp, 4.dp, 8.dp, 4.dp)
+        )
+        Text(
+            text = "25/Friend/Facebook/Single",
+            modifier = Modifier.padding(8.dp, 4.dp, 4.dp, 8.dp),
+            fontSize = 14.sp,
+            color = Color.Gray
+        )
     }
     Divider(color = Color.DarkGray)
 }
