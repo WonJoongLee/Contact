@@ -1,6 +1,7 @@
 package com.wonjoong.android.contact
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Scaffold(
-                backgroundColor = colorResource(id = R.color.design_default_color_primary_dark)
+                backgroundColor = colorResource(id = R.color.white)
             ) {
                 Navigation()
             }
@@ -51,9 +52,11 @@ class MainActivity : ComponentActivity() {
 fun Navigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "main") {
+        // Main Screen
         composable("main") {
             MainScreen(navController = navController)
         }
+        // User detail view
         composable(
             "details/{name}",
             arguments = listOf(navArgument("name") { type = NavType.StringType })
@@ -130,16 +133,18 @@ fun SearchView(state: MutableState<TextFieldValue>) {
 
 @Composable
 fun PersonListItem(name: String, onItemClick: (String) -> Unit) {
-    Row(
+    Column(
         modifier = Modifier
             .clickable(onClick = { onItemClick(name) })
-            .background(colorResource(id = R.color.design_default_color_primary_dark))
-            .height(57.dp)
-            .fillMaxWidth()
-            .padding(PaddingValues(8.dp, 16.dp))
+            .background(colorResource(id = R.color.white))
+            .height(64.dp)
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.Center
     ) {
-        Text(text = name, fontSize = 18.sp, color = Color.White)
+        Text(text = name, fontSize = 18.sp, color = Color.Black, modifier = Modifier.padding(8.dp, 4.dp, 8.dp, 4.dp))
+        Text(text = "25/Friend/Facebook/Single", modifier = Modifier.padding(8.dp, 4.dp, 4.dp, 8.dp), fontSize = 14.sp, color = Color.Gray)
     }
+    Divider(color = Color.DarkGray)
 }
 
 @Composable
@@ -167,6 +172,7 @@ fun PersonList(
                 name = filteredPerson,
                 onItemClick = { selectedPerson ->
                     navController.navigate("details/$selectedPerson") {
+                        Log.e("selectedPerson", selectedPerson)
                         // Pop up to the start destination of the graph to
                         // avoid building up a large stack of destinations
                         // on the back stack as users select items
