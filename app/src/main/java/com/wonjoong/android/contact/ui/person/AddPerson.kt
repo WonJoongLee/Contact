@@ -1,14 +1,16 @@
 package com.wonjoong.android.contact.ui.person
 
 import android.util.Log
-import android.view.WindowManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,10 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.wonjoong.android.contact.R
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.layout.RelocationRequester
-import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun AddPerson() {
@@ -29,6 +27,22 @@ fun AddPerson() {
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
+        val eachInputText = remember {
+            mutableStateListOf(
+                "", // name
+                "", // relationship
+                "", // age
+                "", // company
+                "", // hobby
+                "", // personality
+                "", // marriage
+                "", // children
+                "", // like
+                "", // dontlike
+                "", // etc
+            )
+        }
+
         Image(
             painter = painterResource(id = R.drawable.blank_profile_pictrue),
             contentDescription = "Person Image",
@@ -39,379 +53,16 @@ fun AddPerson() {
                 .clip(RoundedCornerShape(percent = 10))
         )
 
-        //var inputName: String by remember { mutableStateOf("") }
-        var inputName by remember { mutableStateOf("") }
-        var relationship by remember { mutableStateOf("") }
-        var inputAge by remember { mutableStateOf("") }
-        var inputCompany by remember { mutableStateOf("") }
-        var inputHobby by remember { mutableStateOf("") }
-        var inputPersonality by remember { mutableStateOf("") }
-        var inputMarriage by remember { mutableStateOf("") }
-        var inputChildren by remember { mutableStateOf("") }
-        var inputLike by remember { mutableStateOf("") }
-        var inputDontLike by remember { mutableStateOf("") }
-        var inputETC by remember { mutableStateOf("") }
-
-        // name
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.name),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = inputName,
-                label = {
-                    Text("Name")
-                },
-                onValueChange = { inputName = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
+        personInputList.values.forEachIndexed { index, data ->
+            InputItem(data, eachInputText, index)
         }
-
-        // relationship
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.relationship),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = relationship,
-                label = {
-                    Text("Relationship")
-                },
-                onValueChange = { relationship = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-        }
-
-        // age
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.age),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = inputAge,
-                label = {
-                    Text("Age")
-                },
-                onValueChange = { inputAge = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-        }
-
-        // company
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.company),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = inputCompany,
-                label = {
-                    Text("Company")
-                },
-                onValueChange = { inputCompany = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-        }
-
-        // hobby
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.hobby),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = inputHobby,
-                label = {
-                    Text("Hobby")
-                },
-                onValueChange = { inputHobby = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-        }
-
-        // personality
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.personality),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = inputPersonality,
-                label = {
-                    Text("Personality")
-                },
-                onValueChange = { inputPersonality = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-        }
-
-        // marriage
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.marriage),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = inputMarriage,
-                label = {
-                    Text("Marriage")
-                },
-                onValueChange = { inputMarriage = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-        }
-
-        // children
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.children),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = inputChildren,
-                label = {
-                    Text("Children")
-                },
-                onValueChange = { inputChildren = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-        }
-
-        // like
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.like),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = inputLike,
-                label = {
-                    Text("likes")
-                },
-                onValueChange = { inputLike = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-        }
-
-        // dontlike
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.dont_like),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = inputDontLike,
-                label = {
-                    Text("Doesn't like")
-                },
-                onValueChange = { inputDontLike = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-        }
-
-        // etc
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-        ) {
-            //var inputName by remember { mutableStateOf("") }
-            Text(
-                text = stringResource(id = R.string.etc),
-                modifier = Modifier
-                    .width(104.dp)
-                    .padding(12.dp, 0.dp),
-            )
-            TextField(
-                value = inputETC,
-                label = {
-                    Text("ETC")
-                },
-                onValueChange = { inputETC = it },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Gray,
-                    focusedLabelColor = Color.Black,
-                    cursorColor = Color.Black
-                )
-            )
-        }
-
-//        personInputList.values.forEachIndexed { index, inputPersonData ->
-//            InputItem(content = inputPersonData)
-//        }
 
         // Button
         Button(
             onClick = {
-                Log.e("name", "$inputName, $inputAge")
+                repeat(10) {
+                    Log.e("temp", eachInputText[it])
+                }
             },
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = Color.LightGray
@@ -436,6 +87,7 @@ fun AddPerson() {
 private fun getPersonInputList(): LinkedHashMap<String, InputPersonData> {
     val personInputList = LinkedHashMap<String, InputPersonData>()
     personInputList["name"] = InputPersonData(R.string.name, "Enter his/her name")
+    personInputList["relationship"] = InputPersonData(R.string.relationship, "Enter his/her age")
     personInputList["age"] = InputPersonData(R.string.age, "Enter his/her age")
     personInputList["company"] = InputPersonData(R.string.company, "Enter his/her name")
     personInputList["hobby"] = InputPersonData(R.string.hobby, "Enter his/her name")
@@ -451,35 +103,36 @@ private fun getPersonInputList(): LinkedHashMap<String, InputPersonData> {
 @Composable
 fun InputItem(
     content: InputPersonData,
+    inputTextCategory: SnapshotStateList<String>,
+    index: Int
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .padding(0.dp, 8.dp)
     ) {
-        var inputName by remember { mutableStateOf("") }
         Text(
             text = stringResource(id = content.stringId),
             modifier = Modifier
-                .width(96.dp)
+                .width(104.dp)
                 .padding(12.dp, 0.dp),
         )
         TextField(
-            value = inputName,
+            value = inputTextCategory[index],
             label = {
-                Text(content.label)
+                Text(stringResource(id = content.stringId))
             },
-            onValueChange = { inputName = it },
+            onValueChange = { inputTextCategory[index] = it },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp, 0.dp)
+                .padding(8.dp, 0.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                focusedIndicatorColor = Color.Black,
+                unfocusedIndicatorColor = Color.Gray,
+                focusedLabelColor = Color.Black,
+                cursorColor = Color.Black
+            )
         )
     }
 }
-
-//@Preview
-//@Composable
-//private fun AddPersonPreview() {
-//    AddPerson()
-//}
