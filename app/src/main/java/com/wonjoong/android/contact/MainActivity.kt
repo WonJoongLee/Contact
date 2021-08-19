@@ -72,8 +72,8 @@ fun Navigation() {
         }
         composable(
             "addperson"
-        ){
-            AddPerson()
+        ) {
+            AddPerson(navController = navController)
         }
     }
 }
@@ -115,7 +115,7 @@ fun SearchView(navController: NavController, state: MutableState<TextFieldValue>
             IconButton(onClick = {
                 navController.navigate("addperson") {
                     Log.e("moveTo", "Add Person View")
-                    popUpTo("main"){
+                    popUpTo("main") {
                         saveState = true
                     }
                     launchSingleTop = true
