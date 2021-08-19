@@ -35,6 +35,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.wonjoong.android.contact.ui.DetailsScreen
+import com.wonjoong.android.contact.ui.person.AddPerson
 import com.wonjoong.android.contact.ui.theme.ContactTheme
 
 class MainActivity : ComponentActivity() {
@@ -67,6 +68,11 @@ fun Navigation() {
                 DetailsScreen(name = name)
             }
         }
+        composable(
+            "addperson"
+        ){
+            AddPerson()
+        }
     }
 }
 
@@ -74,7 +80,7 @@ fun Navigation() {
 fun MainScreen(navController: NavController) {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     Column {
-        SearchView(textState)
+        SearchView(navController, textState)
         PersonList(navController = navController, state = textState)
     }
 }
@@ -87,7 +93,7 @@ fun MainScreenPreview() {
 }
 
 @Composable
-fun SearchView(state: MutableState<TextFieldValue>) {
+fun SearchView(navController: NavController, state: MutableState<TextFieldValue>) {
     TextField(
         value = state.value, onValueChange = { value ->
             state.value = value
@@ -104,7 +110,16 @@ fun SearchView(state: MutableState<TextFieldValue>) {
             )
         },
         trailingIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.navigate("addperson") {
+                    Log.e("moveTo", "Add Person View")
+                    popUpTo("main"){
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }) {
                 Icon(Icons.Default.Add, contentDescription = "")
             }
         },
@@ -253,7 +268,7 @@ fun PersonListItemPreview() {
 @Composable
 fun SearchViewPreview() {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
-    SearchView(textState)
+    //SearchView(textState)
 }
 
 
