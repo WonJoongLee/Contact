@@ -3,6 +3,7 @@ package com.wonjoong.android.contact
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -41,6 +42,7 @@ import com.wonjoong.android.contact.ui.theme.ContactTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setContent {
             Scaffold(
                 backgroundColor = colorResource(id = R.color.white)

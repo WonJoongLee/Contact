@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Contact</string>
     <string name="name">Name</string>
+    <string name="relationship">Relationship</string>
     <string name="age">Age</string>
     <string name="company">Company</string>
     <string name="hobby">Hobby</string>
@@ -9,4 +10,5 @@
     <string name="children">Children</string>
     <string name="like">Like</string>
     <string name="dont_like">Don\'t like</string>
+    <string name="etc">ETC</string>
 </resources>
