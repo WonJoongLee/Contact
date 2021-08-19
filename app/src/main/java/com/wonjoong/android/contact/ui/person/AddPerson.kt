@@ -28,21 +28,6 @@ import com.wonjoong.android.contact.data.Person
 import com.wonjoong.android.contact.data.PersonViewModel
 import com.wonjoong.android.contact.data.PersonViewModelFactory
 
-enum class PersonCategory(val num: Int) {
-    NAME(0),
-    RELATIONSHIP(1),
-    AGE(2),
-    COMPANY(3),
-    HOBBY(4),
-    PERSONALITY(5),
-    MARRIAGE(6),
-    CHILDREN(7),
-    LIKE(8),
-    DONTLIKE(9),
-    ETC(10),
-    ID(11);
-}
-
 @Composable
 fun AddPerson(navController: NavController) {
     val context = LocalContext.current
@@ -125,22 +110,6 @@ fun AddPerson(navController: NavController) {
     }
 }
 
-private fun getPersonInputList(): LinkedHashMap<String, InputPersonData> {
-    val personInputList = LinkedHashMap<String, InputPersonData>()
-    personInputList["name"] = InputPersonData(R.string.name, "Enter his/her name")
-    personInputList["relationship"] = InputPersonData(R.string.relationship, "Enter his/her age")
-    personInputList["age"] = InputPersonData(R.string.age, "Enter his/her age")
-    personInputList["company"] = InputPersonData(R.string.company, "Enter his/her name")
-    personInputList["hobby"] = InputPersonData(R.string.hobby, "Enter his/her name")
-    personInputList["personality"] = InputPersonData(R.string.personality, "Enter his/her name")
-    personInputList["marriage"] = InputPersonData(R.string.marriage, "Enter his/her name")
-    personInputList["children"] = InputPersonData(R.string.children, "Enter the name")
-    personInputList["like"] = InputPersonData(R.string.like, "Enter the name")
-    personInputList["dont_like"] = InputPersonData(R.string.dont_like, "Enter the name")
-    personInputList["etc"] = InputPersonData(R.string.etc, "Enter the name")
-    return personInputList
-}
-
 @Composable
 fun InputItem(
     content: InputPersonData,
@@ -176,4 +145,35 @@ fun InputItem(
             )
         )
     }
+}
+
+private fun getPersonInputList(): LinkedHashMap<String, InputPersonData> {
+    val personInputList = LinkedHashMap<String, InputPersonData>()
+    personInputList["name"] = InputPersonData(R.string.name, "Enter his/her name")
+    personInputList["relationship"] = InputPersonData(R.string.relationship, "Enter his/her age")
+    personInputList["age"] = InputPersonData(R.string.age, "Enter his/her age")
+    personInputList["company"] = InputPersonData(R.string.company, "Enter his/her name")
+    personInputList["hobby"] = InputPersonData(R.string.hobby, "Enter his/her name")
+    personInputList["personality"] = InputPersonData(R.string.personality, "Enter his/her name")
+    personInputList["marriage"] = InputPersonData(R.string.marriage, "Enter his/her name")
+    personInputList["children"] = InputPersonData(R.string.children, "Enter the name")
+    personInputList["like"] = InputPersonData(R.string.like, "Enter the name")
+    personInputList["dont_like"] = InputPersonData(R.string.dont_like, "Enter the name")
+    personInputList["etc"] = InputPersonData(R.string.etc, "Enter the name")
+    return personInputList
+}
+
+enum class PersonCategory(val num: Int) {
+    NAME(0),
+    RELATIONSHIP(1),
+    AGE(2),
+    COMPANY(3),
+    HOBBY(4),
+    PERSONALITY(5),
+    MARRIAGE(6),
+    CHILDREN(7),
+    LIKE(8),
+    DONTLIKE(9),
+    ETC(10),
+    ID(11);
 }
