@@ -76,6 +76,8 @@ dependencies {
     implementation "androidx.room:room-ktx:2.3.0"
     androidTestImplementation "androidx.room:room-testing:2.3.0"
 
+    // live data
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     // Lifecycle components
     // implementation "androidx.lifecycle : lifecycle-extensions : 2.2.0"
     // implementation "androidx.lifecycle : lifecycle-common-java8 : 2.2.0"

@@ -1,5 +1,6 @@
 package com.wonjoong.android.contact.ui.person
 
+import android.app.Application
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -16,13 +17,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wonjoong.android.contact.R
+import com.wonjoong.android.contact.data.PersonViewModel
+import com.wonjoong.android.contact.data.PersonViewModelFactory
+import androidx.compose.runtime.livedata.observeAsState
+import com.wonjoong.android.contact.data.Person
+
+enum class PersonCategory(val num : Int) {
+    NAME(0),
+    RELATIONSHIP(1),
+    AGE(2),
+    COMPANY(3),
+    HOBBY(4),
+    PERSONALITY(5),
+    MARRIAGE(6),
+    CHILDREN(7),
+    LIKE(8),
+    DONTLIKE(9),
+    ETC(10),
+    ID(11);
+}
 
 @Composable
 fun AddPerson() {
+    val context = LocalContext.current
+    val mPersonViewModel : PersonViewModel = viewModel(factory = PersonViewModelFactory(context.applicationContext as Application))
+    //val items = mPersonViewModel.readAllData.observeAsState(listOf()).value
+    //println(items)
+    //println(mPersonViewModel.readAllData.observeAsState(listOf()))
+
+    mPersonViewModel.readAllData.observeAsState(listOf()).value.forEach {
+        println(it)
+    }
+
+    //여기 이하는 건들면 안됨
     val personInputList = getPersonInputList()
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState())
@@ -60,9 +93,36 @@ fun AddPerson() {
         // Button
         Button(
             onClick = {
-                repeat(10) {
-                    Log.e("temp", eachInputText[it])
-                }
+                //Log.e("id", eachInputText[PersonCategory.ID.ordinal].toInt().toString())
+                Log.e("name", eachInputText[PersonCategory.NAME.num])
+                Log.e("relationship", eachInputText[PersonCategory.RELATIONSHIP.num])
+                Log.e("age", eachInputText[PersonCategory.AGE.ordinal].toInt().toString())
+                Log.e("company", eachInputText[PersonCategory.COMPANY.num])
+                Log.e("hobby", eachInputText[PersonCategory.HOBBY.num])
+                Log.e("personality", eachInputText[PersonCategory.PERSONALITY.num])
+                Log.e("marriage", eachInputText[PersonCategory.MARRIAGE.num])
+                Log.e("children", eachInputText[PersonCategory.CHILDREN.num])
+                Log.e("like", eachInputText[PersonCategory.LIKE.num])
+                Log.e("dont_like", eachInputText[PersonCategory.DONTLIKE.num])
+                Log.e("etc", eachInputText[PersonCategory.ETC.num])
+
+                val newPerson = Person(
+                    id = 0,
+                    name = eachInputText[PersonCategory.NAME.num],
+                    relationship = eachInputText[PersonCategory.RELATIONSHIP.num],
+                    age = eachInputText[PersonCategory.AGE.ordinal].toInt(),
+                    //age = 25,
+                    company = eachInputText[PersonCategory.COMPANY.num],
+                    hobby = eachInputText[PersonCategory.HOBBY.num],
+                    personality = eachInputText[PersonCategory.PERSONALITY.num],
+                    marriage = eachInputText[PersonCategory.MARRIAGE.num],
+                    children = eachInputText[PersonCategory.CHILDREN.num],
+                    like = eachInputText[PersonCategory.LIKE.num],
+                    dont_like = eachInputText[PersonCategory.DONTLIKE.num],
+                    etc = eachInputText[PersonCategory.ETC.num]
+                )
+                mPersonViewModel.addPerson(newPerson)
+
             },
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = Color.LightGray
