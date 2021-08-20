@@ -1,5 +1,6 @@
 package com.wonjoong.android.contact
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
@@ -17,24 +18,30 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import com.wonjoong.android.contact.data.Person
+import com.wonjoong.android.contact.data.PersonViewModel
+import com.wonjoong.android.contact.data.PersonViewModelFactory
 import com.wonjoong.android.contact.ui.DetailsScreen
 import com.wonjoong.android.contact.ui.person.AddPerson
 import com.wonjoong.android.contact.ui.theme.ContactTheme
@@ -60,15 +67,26 @@ fun Navigation() {
         composable("main") {
             MainScreen(navController = navController)
         }
-        // User detail view
+
         composable(
-            "details/{name}",
-            arguments = listOf(navArgument("name") { type = NavType.StringType })
+            "details/{personId}",
+            arguments = listOf(navArgument("personId") { type = NavType.IntType })
         ) { backStackEntry ->
-            backStackEntry.arguments?.getString("name")?.let { name ->
-                DetailsScreen(name = name)
+            backStackEntry.arguments?.getInt("personId")?.let{ data ->
+                DetailsScreen(personId = data)
             }
         }
+
+
+        // User detail view
+//        composable(
+//            "details/{person}",
+//            arguments = listOf(navArgument("person") { type = NavType.ParcelableType(Person::class.java) })
+//        ) { backStackEntry ->
+//            backStackEntry.arguments?.getString("person")?.let { person ->
+//                DetailsScreen(person = person as Person)
+//            }
+//        }
         composable(
             "addperson"
         ) {
@@ -79,10 +97,16 @@ fun Navigation() {
 
 @Composable
 fun MainScreen(navController: NavController) {
+    val context = LocalContext.current
+    val mPersonViewModel: PersonViewModel =
+        viewModel(factory = PersonViewModelFactory(context.applicationContext as Application))
     val textState = remember { mutableStateOf(TextFieldValue("")) }
+
+    val personList = mPersonViewModel.readAllData.observeAsState(listOf()).value
+
     Column {
         SearchView(navController, textState)
-        PersonList(navController = navController, state = textState)
+        PersonList(navController = navController, state = textState, personList = personList)
     }
 }
 
@@ -124,19 +148,6 @@ fun SearchView(navController: NavController, state: MutableState<TextFieldValue>
                 Icon(Icons.Default.Add, contentDescription = "")
             }
         },
-//        trailingIcon = {
-//            if (state.value != TextFieldValue("")) {
-//                IconButton(onClick = { state.value = TextFieldValue("") }) {
-//                    Icon(
-//                        Icons.Default.Close,
-//                        contentDescription = "",
-//                        modifier = Modifier
-//                            .padding(15.dp)
-//                            .size(24.dp)
-//                    )
-//                }
-//            }
-//        },
         singleLine = true,
         shape = RectangleShape,
         colors = TextFieldDefaults.textFieldColors(
@@ -155,10 +166,14 @@ fun SearchView(navController: NavController, state: MutableState<TextFieldValue>
 }
 
 @Composable
-fun PersonListItem(name: String, onItemClick: (String) -> Unit) {
+fun PersonListItem(person : Person, name: String, onItemClick: (String) -> Unit) {
     Column(
         modifier = Modifier
-            .clickable(onClick = { onItemClick(name) })
+            .clickable(onClick = {
+                onItemClick(
+                    person.id.toString()
+                )
+            })
             .background(colorResource(id = R.color.white))
             .height(64.dp)
             .fillMaxWidth(),
@@ -183,18 +198,20 @@ fun PersonListItem(name: String, onItemClick: (String) -> Unit) {
 @Composable
 fun PersonList(
     navController: NavController,
-    state: MutableState<TextFieldValue>
+    state: MutableState<TextFieldValue>,
+    personList: List<Person>
 ) {
-    val people = getListOfPerson()
-    var filteredPeople: ArrayList<String>
+    //val people = getListOfPerson()
+    val people = personList
+    var filteredPeople: List<Person>
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         val searchedText = state.value.text
         filteredPeople = if (searchedText.isEmpty()) {
             people
         } else {
-            val resultList = ArrayList<String>()
+            val resultList = mutableListOf<Person>()
             for (person in people) {
-                if (person.contains(searchedText)) {
+                if (person.name.contains(searchedText)) {
                     resultList.add(person)
                 }
             }
@@ -202,10 +219,11 @@ fun PersonList(
         }
         items(filteredPeople) { filteredPerson ->
             PersonListItem(
-                name = filteredPerson,
-                onItemClick = { selectedPerson ->
-                    navController.navigate("details/$selectedPerson") {
-                        Log.e("selectedPerson", selectedPerson)
+                person = filteredPerson,
+                name = filteredPerson.name,
+                onItemClick = { id -> // selected person
+                    navController.navigate("details/$id") {
+                        Log.e("personId", id)
                         // Pop up to the start destination of the graph to
                         // avoid building up a large stack of destinations
                         // on the back stack as users select items
@@ -251,18 +269,18 @@ fun getListOfPerson(): ArrayList<String> {
     )
 }
 
-@Preview
-@Composable
-fun PersonListPreview() {
-    val navController = rememberNavController()
-    val textState = remember { mutableStateOf(TextFieldValue("")) }
-    PersonList(navController = navController, state = textState)
-}
+//@Preview
+//@Composable
+//fun PersonListPreview() {
+//    val navController = rememberNavController()
+//    val textState = remember { mutableStateOf(TextFieldValue("")) }
+//    PersonList(navController = navController, state = textState)
+//}
 
 @Preview(showBackground = true)
 @Composable
 fun PersonListItemPreview() {
-    PersonListItem(name = "홍길동", onItemClick = { })
+    //PersonListItem(name = "홍길동", onItemClick = { })
 }
 
 @Preview(showBackground = true)
