@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -48,7 +49,7 @@ import com.wonjoong.android.contact.ui.theme.ContactTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         setContent {
             Scaffold(
                 backgroundColor = colorResource(id = R.color.white)
@@ -157,7 +158,7 @@ fun SearchView(navController: NavController, state: MutableState<TextFieldValue>
 }
 
 @Composable
-fun PersonListItem(person: Person, name: String, onItemClick: (String) -> Unit) {
+fun PersonListItem(person: Person, onItemClick: (String) -> Unit) {
     Column(
         modifier = Modifier
             .clickable(onClick = {
@@ -166,18 +167,18 @@ fun PersonListItem(person: Person, name: String, onItemClick: (String) -> Unit) 
                 )
             })
             .background(colorResource(id = R.color.white))
-            .height(64.dp)
-            .fillMaxWidth(),
+            .height(IntrinsicSize.Min)
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = name,
+            text = person.name,
             fontSize = 18.sp,
             color = Color.Black,
             modifier = Modifier.padding(8.dp, 4.dp, 8.dp, 4.dp)
         )
         Text(
-            text = "25/Friend/Facebook/Single",
+            text = "${person.age}/${person.relationship}/${person.company}/${person.marriage}",
             modifier = Modifier.padding(8.dp, 4.dp, 4.dp, 8.dp),
             fontSize = 14.sp,
             color = Color.Gray
@@ -211,7 +212,6 @@ fun PersonList(
         items(filteredPeople) { filteredPerson ->
             PersonListItem(
                 person = filteredPerson,
-                name = filteredPerson.name,
                 onItemClick = { id -> // selected person
                     navController.navigate("details/$id") {
                         Log.e("personId", id)
