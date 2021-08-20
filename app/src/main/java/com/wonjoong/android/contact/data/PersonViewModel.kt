@@ -23,10 +23,12 @@ class PersonViewModel(application: Application) : AndroidViewModel(application) 
             repository.addPerson(person)
         }
     }
+
+    fun getUserById(id: Int) = repository.getUserById(id)
 }
 
 class PersonViewModelFactory(
-    private val application : Application
+    private val application: Application
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")

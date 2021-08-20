@@ -12,8 +12,11 @@ interface PersonDAO {
 
     // OnConflictStrategy : If there is same person, just ignore the person. Maybe it should be change later
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addPerson(person : Person)
+    suspend fun addPerson(person: Person)
 
     @Query("SELECT * FROM person_table ORDER BY id ASC")
-    fun readAllData() : LiveData<List<Person>>
+    fun readAllData(): LiveData<List<Person>>
+
+    @Query("SELECT * FROM person_table WHERE id = :id")
+    fun getUserById(id: Int): LiveData<Person>
 }

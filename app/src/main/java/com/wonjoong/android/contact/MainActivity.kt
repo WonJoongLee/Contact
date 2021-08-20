@@ -4,7 +4,6 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -49,6 +48,7 @@ import com.wonjoong.android.contact.ui.theme.ContactTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             Scaffold(
                 backgroundColor = colorResource(id = R.color.white)
@@ -62,31 +62,27 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+
+    val context = LocalContext.current
+    val mPersonViewModel: PersonViewModel =
+        viewModel(factory = PersonViewModelFactory(context.applicationContext as Application))
+    val personList = mPersonViewModel.readAllData
+
     NavHost(navController = navController, startDestination = "main") {
         // Main Screen
         composable("main") {
-            MainScreen(navController = navController)
+            MainScreen(navController = navController, mPersonViewModel = mPersonViewModel)
         }
-
         composable(
             "details/{personId}",
             arguments = listOf(navArgument("personId") { type = NavType.IntType })
         ) { backStackEntry ->
-            backStackEntry.arguments?.getInt("personId")?.let{ data ->
-                DetailsScreen(personId = data)
+            backStackEntry.arguments?.getInt("personId")?.let { data ->
+                DetailsScreen(
+                    person = personList.value?.get(data - 1) ?: throw IllegalAccessException()
+                )
             }
         }
-
-
-        // User detail view
-//        composable(
-//            "details/{person}",
-//            arguments = listOf(navArgument("person") { type = NavType.ParcelableType(Person::class.java) })
-//        ) { backStackEntry ->
-//            backStackEntry.arguments?.getString("person")?.let { person ->
-//                DetailsScreen(person = person as Person)
-//            }
-//        }
         composable(
             "addperson"
         ) {
@@ -96,14 +92,9 @@ fun Navigation() {
 }
 
 @Composable
-fun MainScreen(navController: NavController) {
-    val context = LocalContext.current
-    val mPersonViewModel: PersonViewModel =
-        viewModel(factory = PersonViewModelFactory(context.applicationContext as Application))
+fun MainScreen(navController: NavController, mPersonViewModel: PersonViewModel) {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
-
     val personList = mPersonViewModel.readAllData.observeAsState(listOf()).value
-
     Column {
         SearchView(navController, textState)
         PersonList(navController = navController, state = textState, personList = personList)
@@ -114,7 +105,7 @@ fun MainScreen(navController: NavController) {
 @Composable
 fun MainScreenPreview() {
     val navController = rememberNavController()
-    MainScreen(navController = navController)
+//    MainScreen(navController = navController)
 }
 
 @Composable
@@ -166,7 +157,7 @@ fun SearchView(navController: NavController, state: MutableState<TextFieldValue>
 }
 
 @Composable
-fun PersonListItem(person : Person, name: String, onItemClick: (String) -> Unit) {
+fun PersonListItem(person: Person, name: String, onItemClick: (String) -> Unit) {
     Column(
         modifier = Modifier
             .clickable(onClick = {

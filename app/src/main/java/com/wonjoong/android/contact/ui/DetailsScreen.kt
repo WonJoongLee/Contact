@@ -1,7 +1,5 @@
 package com.wonjoong.android.contact.ui
 
-import android.graphics.Paint
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,9 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.wonjoong.android.contact.data.Person
 
 @Composable
-fun DetailsScreen(personId: Int) {
+fun DetailsScreen(person: Person) {
+    // val getPerson = mPersonViewModel.getUserById(personId).observeAsState().value // Select Person with ID
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -24,9 +24,8 @@ fun DetailsScreen(personId: Int) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Text(
-            text = personId.toString(),
+            text = person.name,
             color = Color.Black,
             fontSize = 44.sp
         )
@@ -36,5 +35,5 @@ fun DetailsScreen(personId: Int) {
 @Preview(showBackground = true)
 @Composable
 fun DetailsScreenPreview() {
-    DetailsScreen(personId = 1)
+    //DetailsScreen(personId = 1)
 }
