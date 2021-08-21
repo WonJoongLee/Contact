@@ -18,6 +18,8 @@ interface PersonDAO {
     @Query("SELECT * FROM person_table ORDER BY id ASC")
     fun readAllData(): LiveData<List<Person>>
 
+    // This isn't using, because sending data from MainActivity to DetailsScreen will be
+    // faster than searching data at DetailsScreen.
     @Query("SELECT * FROM person_table WHERE id = :id")
     fun getUserById(id: Int): LiveData<Person>
 }

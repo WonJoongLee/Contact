@@ -1,14 +1,18 @@
 package com.wonjoong.android.contact.ui
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.runtime.*
+import androidx.compose.runtime.collection.mutableVectorOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -66,22 +70,59 @@ fun InputItem(person: Person, content: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(0.dp, 8.dp)
+            .padding(0.dp, 8.dp),
     ) {
-        Text(
-            text = stringResource(id = propertyToStringValue(content)),
-            modifier = Modifier
-                .width(132.dp)
-                .padding(12.dp, 0.dp),
-            fontSize = 18.sp
-        )
-        Text(
+
+            Text(
+                text = stringResource(id = propertyToStringValue(content)),
+                modifier = Modifier
+                    .width(132.dp)
+                    .padding(12.dp, 0.dp),
+                fontSize = 18.sp
+            )
+            var isExpanded by remember { mutableStateOf(false) }
+            val surfaceColor: Color by animateColorAsState(
+                if (isExpanded) Color.Black else Color.Gray
+            )
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            elevation = 1.dp,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp, 0.dp),
-            text = contentToStringValue(person, content),
-            fontSize = 18.sp
-        )
+                .padding(0.dp, 0.dp, 6.dp, 0.dp)
+        ){
+            Row(modifier = Modifier
+                .clickable { isExpanded = !isExpanded },
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    modifier = Modifier
+                        .animateContentSize()
+                        .weight(1f)
+                        .padding(8.dp, 0.dp),
+                    text = contentToStringValue(person, content),
+                    fontSize = 18.sp,
+                    maxLines = if (isExpanded) {
+                        Int.MAX_VALUE
+                    } else {
+                        1
+                    },
+                    color = surfaceColor,
+                    //width = Width
+                )
+                Icon(
+                    painter = if (isExpanded) {
+                        painterResource(id = R.drawable.ic_baseline_arrow_drop_up_24)
+                    } else {
+                        painterResource(id = R.drawable.ic_baseline_arrow_drop_down_24)
+                    },
+                    contentDescription = "down",
+                    Modifier.width(24.dp)
+                    //modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+
     }
 }
 
