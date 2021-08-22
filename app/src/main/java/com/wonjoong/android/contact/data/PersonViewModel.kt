@@ -1,6 +1,7 @@
 package com.wonjoong.android.contact.data
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +26,38 @@ class PersonViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun getUserById(id: Int) = repository.getUserById(id)
+    fun updateUserById(
+        id: Int,
+        name: String,
+        relationship: String,
+        age: Int,
+        company: String,
+        hobby: String,
+        personality: String,
+        marriage: String,
+        children: String,
+        like: String,
+        dontlike: String,
+        etc: String
+    ) {
+        Log.e("CheckName", name)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateUserById(
+                id,
+                name,
+                relationship,
+                age,
+                company,
+                hobby,
+                personality,
+                marriage,
+                children,
+                like,
+                dontlike,
+                etc
+            )
+        }
+    }
 }
 
 class PersonViewModelFactory(

@@ -80,7 +80,8 @@ fun Navigation() {
         ) { backStackEntry ->
             backStackEntry.arguments?.getInt("personId")?.let { data ->
                 DetailsScreen(
-                    person = personList.value?.get(data - 1) ?: throw IllegalAccessException()
+                    person = personList.value?.get(data - 1) ?: throw IllegalAccessException(),
+                    mPersonViewModel = mPersonViewModel
                 )
             }
         }

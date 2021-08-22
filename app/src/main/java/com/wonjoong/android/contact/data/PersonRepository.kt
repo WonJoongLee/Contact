@@ -11,7 +11,36 @@ class PersonRepository(private val personDao: PersonDAO) {
     }
 
     val getUserById: (Int) -> LiveData<Person> = { id ->
-        Log.e("1", personDao.getUserById(id).value.toString())
         personDao.getUserById(id)
+    }
+
+    suspend fun updateUserById(
+        id: Int,
+        name: String,
+        relationship: String,
+        age: Int,
+        company: String,
+        hobby: String,
+        personality: String,
+        marriage: String,
+        children: String,
+        like: String,
+        dontlike: String,
+        etc: String
+    ) {
+        personDao.updateUserById(
+            id,
+            name,
+            relationship,
+            age,
+            company,
+            hobby,
+            personality,
+            marriage,
+            children,
+            like,
+            dontlike,
+            etc
+        )
     }
 }

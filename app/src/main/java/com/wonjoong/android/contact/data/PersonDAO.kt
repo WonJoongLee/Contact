@@ -22,4 +22,20 @@ interface PersonDAO {
     // faster than searching data at DetailsScreen.
     @Query("SELECT * FROM person_table WHERE id = :id")
     fun getUserById(id: Int): LiveData<Person>
+
+    @Query("UPDATE person_table SET name = :name, relationship = :relationship, age = :age, company = :company, hobby = :hobby, personality = :personality, marriage = :marriage, children = :children, like = :like, dont_like = :dontlike, etc = :etc WHERE id = :id")
+    suspend fun updateUserById(
+        id: Int,
+        name : String,
+        relationship : String,
+        age : Int,
+        company : String,
+        hobby : String,
+        personality : String,
+        marriage : String,
+        children : String,
+        like : String,
+        dontlike : String,
+        etc: String
+    )
 }

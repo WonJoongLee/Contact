@@ -11,35 +11,35 @@ data class Person(
     val id: Int, // pk, auto generate at room
 
     @ColumnInfo(name = "name")
-    val name: String,
+    var name: String,
 
     @ColumnInfo(name = "relationship")
-    val relationship: String,
+    var relationship: String,
 
     @ColumnInfo(name = "age")
-    val age: Int,
+    var age: Int,
 
     @ColumnInfo(name = "company")
-    val company: String,
+    var company: String,
 
     @ColumnInfo(name = "hobby")
-    val hobby: String,
+    var hobby: String,
 
     @ColumnInfo(name = "personality")
-    val personality: String,
+    var personality: String,
 
     @ColumnInfo(name = "marriage")
-    val marriage: String,
+    var marriage: String,
 
     @ColumnInfo(name = "children")
-    val children: String,
+    var children: String,
 
     @ColumnInfo(name = "like")
-    val like: String,
+    var like: String,
 
     @ColumnInfo(name = "dont_like")
-    val dont_like: String,
+    var dont_like: String,
 
     @ColumnInfo(name = "etc")
-    val etc: String
+    var etc: String
 ) : Serializable
